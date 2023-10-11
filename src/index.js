@@ -12,18 +12,28 @@ const reducer = (state = 0, action) => {
   switch (action.type) {
     case 'INC':
       return ++state;
+    case 'DEC':
+      return --state;
     default:
       return state;
   }
 };
 
 // const store = createStore(reducer); //! Old
-const store2 = configureStore({ reducer });
+const store = configureStore({ reducer });
 
-store2.subscribe(() => {
-  console.log(store2.getState());
+const update = () => {
+  document.getElementById('counter').textContent = store.getState();
+}
+
+store.subscribe(() => {
+  update();
 })
 
-store2.dispatch({ type: 'INC' });
-store2.dispatch({ type: 'INC' });
-console.log(store2.getState());
+document.getElementById('inc').addEventListener('click', () => {
+  store.dispatch({ type: 'INC' });
+})
+
+document.getElementById('dec').addEventListener('click', () => {
+  store.dispatch({ type: 'DEC' });
+})
