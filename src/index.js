@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 // import { createStore } from 'redux' //! Old
-import { configureStore } from '@reduxjs/toolkit';
+import { bindActionCreators } from 'redux';
+import { configureStore, bind } from '@reduxjs/toolkit';
 import reducer from './reducer';
-import { inc, dec, rnd } from './actions';
+import * as actions from './actions';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
@@ -12,6 +13,9 @@ import { inc, dec, rnd } from './actions';
 
 // const store = createStore(reducer); //! Old
 const store = configureStore({ reducer });
+const { dispatch } = store;
+
+const { inc, dec, rnd } = bindActionCreators(actions, dispatch);
 
 const update = () => {
   document.getElementById('counter').textContent = store.getState();
@@ -21,15 +25,11 @@ store.subscribe(() => {
   update();
 })
 
-document.getElementById('inc').addEventListener('click', () => {
-  store.dispatch(inc());
-})
+document.getElementById('inc').addEventListener('click', inc);
 
-document.getElementById('dec').addEventListener('click', () => {
-  store.dispatch(dec());
-})
+document.getElementById('dec').addEventListener('click', dec);
 
 document.getElementById('rnd').addEventListener('click', () => {
   const payload = Math.floor(Math.random() * 10);
-  store.dispatch(rnd(payload));
+  rnd(payload);
 })
